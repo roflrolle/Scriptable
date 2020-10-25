@@ -37,20 +37,33 @@ var array= []
 contacts.forEach(function(contact){
   
   if(contact.birthday){
-     
+
 var datenow= new Date()
 var date= new Date(contact.birthday)
 
-date.setFullYear(2020)
-datenow.setFullYear(2020)
-var Difference_In_Time = date.getTime() - datenow.getTime(); 
+if(date.getFullYear() == 1){
+  date.setDate(date.getDate() + 2)
+}
+
+var temp1 = new Date()
+var temp2 = new Date(contact.birthday)
+
+if(temp2.getFullYear() == 1){
+  temp2.setDate(date.getDate() + 2)
+}
+
+temp1.setFullYear(2020)
+temp2.setFullYear(2020)
+
+
+var Difference_In_Time = temp2.getTime() - temp1.getTime(); 
 
 
 var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24); 
 
 Difference_In_Days=Math.round(Difference_In_Days,2)
 
-array.push(Difference_In_Days+";"+contact.givenName+" "+contact.familyName+";"+contact.birthday)
+array.push(Difference_In_Days+";"+contact.givenName+" "+contact.familyName+";"+date)
 
 }
 
