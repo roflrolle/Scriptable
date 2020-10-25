@@ -43,6 +43,7 @@ var date= new Date(contact.birthday)
 
 if(date.getFullYear() == 1){
   date.setDate(date.getDate() + 2)
+  date.setFullYear(1900)
 }
 
 var temp1 = new Date()
