@@ -49,7 +49,7 @@ var temp1 = new Date()
 var temp2 = new Date(contact.birthday)
 
 if(temp2.getFullYear() == 1){
-  temp2.setDate(date.getDate() + 2)
+  temp2.setDate(temp2.getDate() + 2)
 }
 
 temp1.setFullYear(2020)
@@ -79,6 +79,8 @@ var DaysTill= element.split(";")[0]
 if(DaysTill >= 0){
   x+=1
   if(x <=maxvalues){
+    
+    console.log(element)
     
       const label = list.addText(Name)
   label.font = new Font(font_text,fontsize_text)
