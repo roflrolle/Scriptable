@@ -23,6 +23,12 @@ const fontsize_subtext=9
 // #############################
 
 const list = new ListWidget()
+
+let now= new Date()
+minutes=180
+let then= new Date(now.getTime() + minutes*60000)
+list.refreshAfterDate=then
+
 list.backgroundColor=new Color(color_bg)
 
 const header=list.addText("🎂 "+bdaytext)
@@ -54,7 +60,13 @@ if(temp2.getFullYear() == 1){
 }
 
 temp1.setFullYear(2020)
+temp1.setHours(0)
+temp1.setMinutes(0)
+temp1.setSeconds(0)
 temp2.setFullYear(2020)
+temp2.setHours(0)
+temp2.setMinutes(0)
+temp2.setSeconds(0)
 
 
 var Difference_In_Time = temp2.getTime() - temp1.getTime(); 
