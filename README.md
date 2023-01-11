@@ -9,7 +9,9 @@ If work of others is used I will comment it
 
 ## Description
 Show a little widget with the next three Birthdays from your contacts.<br>
-With multiple variables at the top you are free to edit the appearance of the widget.
+With multiple variables at the top you are free to edit the appearance of the widget.<br>
+
+![](bday1.png)
 
 ## Version History
 
