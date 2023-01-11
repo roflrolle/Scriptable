@@ -1,6 +1,3 @@
-// Variables used by Scriptable.
-// These must be at the very top of the file. Do not edit.
-// icon-color: deep-green; icon-glyph: birthday-cake;
 // Author roflrolle
 // Github: https://github.com/roflrolle/Scriptable
 // Version: 2.0
@@ -9,8 +6,8 @@
 const maxvalues = 3                 // maximum bdays to be displayed
 const bdayemoji="🎂"                // Emoji for Bday
 const bdaytext = "Geburtstage"      // Birthday in your language
-const daystext = " Tag(e)"          // Day Text in your language
-const yearstext = " Jahre alt"      // Year Text in your language
+const daystext = "⏲️"          // Day Text in your language
+const yearstext = "🪪"      // Year Text in your language
 const color_bg = "#181919"          // Background Color of the widget
 const color_head = "#fff"           // Color of headline
 const color_text = "#fff"           // color of Contact Name
@@ -35,11 +32,15 @@ let then = new Date(now.getTime() + minutes * 60000)
 list.refreshAfterDate = then
 
 list.backgroundColor = new Color(color_bg)
-
-const header = list.addText(bdayemoji+" " + bdaytext)
+var headerstack=list.addStack()
+headerstack.borderWidth=0
+headerstack.spacing=1
+headerstack.centerAlignContent()
+headerstack.size=new Size(140,30)
+const header = headerstack.addText(bdayemoji+" " + bdaytext)
 header.textColor = new Color(color_head)
 header.font = new Font(font_head, fontsize_head)
-list.addSpacer(10)
+list.addSpacer(2)
 
 let containers = await ContactsContainer.all();
 let contacts = await Contact.all(containers);
@@ -84,55 +85,68 @@ contacts.forEach(function (contact) {
     var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
 
     Difference_In_Days = Math.round(Difference_In_Days, 2)
-
-    array.push(Difference_In_Days + ";" + contact.givenName + " " + contact.familyName + ";" + date + ";" + age)
+    
+    let contactobject = {
+      difference: Difference_In_Days, 
+      givenName:contact.givenName, 
+      familyName:contact.familyName, 
+      birthday:date,
+      age:age
+      }
+  
+    array.push(contactobject)
 
   }
 
 })
-array.sort(function (a, b) { return a.split(";")[0] - b.split(";")[0] })
+array.sort(function (a, b) { return a.difference - b.difference })
 
 var x = 0
 array.forEach(function (element) {
 
-  var birthday = new Date(element.split(";")[2])
-  var Name = element.split(";")[1]
-  var DaysTill = element.split(";")[0]
-  var alter = element.split(";")[3]
+  var birthday = new Date(element.birthday)
+  var Name = element.givenName + " " + element.familyName
+  var DaysTill = element.difference
+  var alter = element.age
 
   if (DaysTill >= 0) {
     x += 1
     if (x <= maxvalues) {
 
+      let entrystackmain=list.addStack()
+      let entrystacksub=list.addStack()
+      entrystackmain.borderWidth=0
+      entrystackmain.spacing=1
+      entrystackmain.centerAlignContent()
+      entrystackmain.size=new Size(140,20)
+      entrystacksub.borderWidth=0
+      entrystacksub.spacing=1
+      entrystacksub.centerAlignContent()
+      entrystacksub.size=new Size(140,20)
+    
       const form = new DateFormatter()
       form.dateFormat = "dd.MM.yyyy"
 
-      const label = list.addText(Name)
+      const label = entrystackmain.addText(Name)
       label.font = new Font(font_text, fontsize_text)
       label.textColor = new Color(color_text)
 
-      const bday = list.addText(form.string(birthday))
+      const bday = entrystacksub.addText(form.string(birthday))
       bday.font = new Font(font_subtext, fontsize_subtext)
       bday.textColor = new Color(color_subtext)
-      bday.rightAlignText()
+      entrystacksub.addSpacer(2)
 
-      var mytext = ""
+      if (show_yearcounter) {
+        var left1 = entrystacksub.addText(yearstext+" "+alter)
+        left1.font = new Font(font_subtext, fontsize_subtext2)
+        left1.textColor = new Color(color_subtext)
+      }
 
-      if (show_datecounter && show_yearcounter) {
-        mytext = alter + yearstext + " | " + DaysTill + daystext
+      if (show_datecounter) {
+        var left2 = entrystacksub.addText(daystext+ " "+DaysTill)
+        left2.font = new Font(font_subtext, fontsize_subtext2)
+        left2.textColor = new Color(color_subtext)
       }
-      else if (show_yearcounter) {
-        mytext = alter + yearstext
-      }
-      else if (show_datecounter) {
-        mytext = DaysTill + daystext
-      }
-      const left = list.addText(mytext)
-      left.font = new Font(font_subtext, fontsize_subtext2)
-      left.textColor = new Color(color_daysleft)
-      left.rightAlignText()
-
-      list.addSpacer(5)
     }
   }
 })
